@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+   themes: acid --default, dracula --prefersdark;
+}
+@plugin "daisyui/theme" {
+  name: "acid";
+  default: true;
+  color-scheme: light;
+  --color-primary: #fc4c02;
+  --color-primary-content: #ffffff;
+}
+@plugin "daisyui/theme" {
+  name: "dracula";
+  prefersdark: true;
+  color-scheme: dark;
+  --color-primary: #fc4c02;
+  --color-primary-content: #ffffff;
+}
+

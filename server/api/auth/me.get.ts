@@ -12,10 +12,11 @@ export default defineEventHandler((event) => {
     throw createError({ statusCode: 401, statusMessage: "Token expired" });
   }
 
-  return JSON.parse(athleteRaw) as {
-    id: number;
-    firstname: string;
-    lastname: string;
-    profile: string;
-  };
+  let athlete: { id: number; firstname: string; lastname: string; profile: string };
+  try {
+    athlete = JSON.parse(athleteRaw);
+  } catch {
+    throw createError({ statusCode: 401, statusMessage: "Invalid session" });
+  }
+  return athlete;
 });

@@ -21,8 +21,26 @@ const SPORT_COLORS: Record<string, string> = {
   Yoga: "#a78bfa",
 };
 
+const SPORT_EMOJIS: Record<string, string> = {
+  Ride: "🚴",
+  VirtualRide: "🚴",
+  Run: "🏃",
+  TrailRun: "🏃",
+  Walk: "🚶",
+  Hike: "🥾",
+  Swim: "🏊",
+  WeightTraining: "🏋️",
+  Crossfit: "🏋️",
+  Workout: "💪",
+  Yoga: "🧘",
+};
+
 function barColor(sportType: string): string {
   return SPORT_COLORS[sportType] ?? "#fc4c02";
+}
+
+function sportEmoji(sportType: string): string {
+  return SPORT_EMOJIS[sportType] ?? "🏅";
 }
 
 const maxDistance = computed(
@@ -70,6 +88,14 @@ function rightLabel(activity: ActivityByType): string {
       :key="activity.sport_type"
       class="flex items-center gap-3"
     >
+      <div>
+        <div
+          class="w-7 h-7 rounded-md flex items-center justify-center text-sm"
+          :style="{ backgroundColor: `${barColor(activity.sport_type)}b3` }"
+        >
+          {{ sportEmoji(activity.sport_type) }}
+        </div>
+      </div>
       <div class="flex flex-col flex-1 gap-1">
         <div class="flex justify-between">
           <span class="text-base-content text-sm font-semibold">
@@ -89,7 +115,6 @@ function rightLabel(activity: ActivityByType): string {
           max="100"
           :style="{ color: barColor(activity.sport_type) }"
         />
-
       </div>
     </div>
   </div>

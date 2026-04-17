@@ -18,7 +18,9 @@ const props = defineProps<{
         class="text-base-content/30 text-xs tracking-widest font-semibold uppercase"
         >Esta semana</span
       >
-      <div class="badge text-xs font-bold bg-primary">● Strava</div>
+      <div class="badge text-xs font-bold text-white bg-primary">
+        ● Powered by Strava
+      </div>
     </div>
 
     <div class="flex flex-col gap-5 lg:grid lg:grid-cols-2 lg:gap-6">

@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/auth";
 
+useSeoMeta({
+  title: "Conecta Strava · Strava Wrapped",
+  description:
+    "Conecta tu cuenta de Strava y genera tu resumen semanal al instante: distancia, tiempo, calorías, desglose por deporte y racha.",
+  ogTitle: "Strava Wrapped — Tu semana, lista para stories",
+  ogDescription:
+    "Conecta Strava y genera un resumen compartible con distancia, tiempo, calorías y racha.",
+  ogType: "website",
+  twitterCard: "summary_large_image",
+});
+
 const auth = useAuthStore();
 const config = useRuntimeConfig();
 

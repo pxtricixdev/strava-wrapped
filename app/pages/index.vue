@@ -3,6 +3,13 @@ import { useAuthStore } from "~/stores/auth";
 import { useStrava } from "~/composables/useStrava";
 import { useShare } from "~/composables/useShare";
 
+useSeoMeta({
+  title: "Mi resumen semanal · Strava Wrapped",
+  description:
+    "Tu resumen semanal de Strava con distancia, tiempo, calorías, desglose por deporte y racha. Listo para compartir.",
+  robots: "noindex, nofollow",
+});
+
 const auth = useAuthStore();
 const {
   stats,

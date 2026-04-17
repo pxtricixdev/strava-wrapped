@@ -1,4 +1,9 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: "Conectando con Strava…",
+  robots: "noindex, nofollow",
+});
+
 const route = useRoute();
 const code = route.query.code as string | undefined;
 

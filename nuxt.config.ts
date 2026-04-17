@@ -12,9 +12,12 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    stravaClientId: process.env.STRAVA_CLIENT_ID,
     stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
+    stravaRedirectUri: process.env.STRAVA_REDIRECT_URI,
     public: {
       stravaClientId: process.env.STRAVA_CLIENT_ID,
+      stravaRedirectUri: process.env.STRAVA_REDIRECT_URI,
     },
   },
 });

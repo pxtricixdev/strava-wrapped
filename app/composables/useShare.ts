@@ -7,18 +7,18 @@ export function useShare() {
   ) {
     sharing.value = true;
     try {
-      const html2canvas = (await import("html2canvas")).default;
+      const { toPng } = await import("html-to-image");
 
-      const canvas = await html2canvas(element, {
-        backgroundColor: "#0d0d0d",
-        scale: 2,
-        useCORS: true,
-        logging: false,
+      const bgColor = getComputedStyle(element).backgroundColor;
+      const dataUrl = await toPng(element, {
+        pixelRatio: 3,
+        backgroundColor: bgColor,
+        cacheBust: true,
       });
 
       const link = document.createElement("a");
       link.download = filename;
-      link.href = canvas.toDataURL("image/png");
+      link.href = dataUrl;
       link.click();
     } finally {
       sharing.value = false;

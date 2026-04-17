@@ -13,6 +13,7 @@ interface ActivityByType {
   sport_type: string;
   count: number;
   distance_km: number;
+  moving_time_seconds: number;
 }
 
 interface WeeklyStats {
@@ -39,14 +40,10 @@ function getMondayOfCurrentWeek(): Date {
 }
 
 export default defineEventHandler(async (event): Promise<WeeklyStats> => {
-  const authHeader = getHeader(event, "authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Missing authorization header",
-    });
+  const token = getCookie(event, "strava_access_token");
+  if (!token) {
+    throw createError({ statusCode: 401, statusMessage: "Not authenticated" });
   }
-  const token = authHeader.replace("Bearer ", "");
 
   const monday = getMondayOfCurrentWeek();
   const sunday = new Date(monday);
@@ -70,7 +67,10 @@ export default defineEventHandler(async (event): Promise<WeeklyStats> => {
   let totalTime = 0;
   let totalElevation = 0;
   let totalCalories = 0;
-  const byTypeMap = new Map<string, { count: number; distance: number }>();
+  const byTypeMap = new Map<
+    string,
+    { count: number; distance: number; moving_time: number }
+  >();
   const activeDaysSet = new Set<number>(); // day-of-week index 0=Mon
 
   for (const a of activities) {
@@ -79,10 +79,15 @@ export default defineEventHandler(async (event): Promise<WeeklyStats> => {
     totalElevation += a.total_elevation_gain;
     totalCalories += a.calories || 0;
 
-    const existing = byTypeMap.get(a.sport_type) ?? { count: 0, distance: 0 };
+    const existing = byTypeMap.get(a.sport_type) ?? {
+      count: 0,
+      distance: 0,
+      moving_time: 0,
+    };
     byTypeMap.set(a.sport_type, {
       count: existing.count + 1,
       distance: existing.distance + a.distance,
+      moving_time: existing.moving_time + a.moving_time,
     });
 
     const actDate = new Date(a.start_date);
@@ -96,8 +101,13 @@ export default defineEventHandler(async (event): Promise<WeeklyStats> => {
       sport_type,
       count: data.count,
       distance_km: Math.round((data.distance / 1000) * 10) / 10,
+      moving_time_seconds: data.moving_time,
     }))
-    .sort((a, b) => b.distance_km - a.distance_km);
+    .sort(
+      (a, b) =>
+        b.distance_km - a.distance_km ||
+        b.moving_time_seconds - a.moving_time_seconds,
+    );
 
   const streakDays = Array.from({ length: 7 }, (_, i) => activeDaysSet.has(i));
 

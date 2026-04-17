@@ -1,10 +1,21 @@
 import { useAuthStore } from "~/stores/auth";
 
-interface ActivityByType {
+export interface ActivityByType {
   sport_type: string;
   count: number;
   distance_km: number;
+  moving_time_seconds: number;
 }
+
+const DISTANCE_SPORTS = new Set([
+  "Ride",
+  "VirtualRide",
+  "Run",
+  "TrailRun",
+  "Walk",
+  "Hike",
+  "Swim",
+]);
 
 export interface WeeklyStats {
   week_start: string;
@@ -79,6 +90,10 @@ export function useStrava() {
     return labels[sportType] ?? sportType;
   }
 
+  function isDistanceSport(sportType: string): boolean {
+    return DISTANCE_SPORTS.has(sportType);
+  }
+
   return {
     stats,
     loading,
@@ -87,5 +102,6 @@ export function useStrava() {
     formatDuration,
     formatShortDate,
     sportLabel,
+    isDistanceSport,
   };
 }
